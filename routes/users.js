@@ -10,18 +10,18 @@ router.post('/register', (req, res) => {
   if (!req.body.firstname && !req.body.username && !req.body.password) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
-  }
-
-  //if the user has not already been registered
-  User.findOne({ firstname:req.body.firstname }).then(data => {
-    if (data === null) {  
-const hash = bcrypt.hashSync(req.body.password , 10);
-      const newUser = new User({
-        firstname: req.body.firstname,
-        username:req.body.username,
-        password: hash,
-        token:uid2(32)
-      
+    }
+    
+    //if the user has not already been registered
+    User.findOne({ firstname:req.body.firstname }).then(data => {
+      if (data === null) {  
+  const hash = bcrypt.hashSync(req.body.password , 10);
+        const newUser = new User({
+          firstname: req.body.firstname,
+          username:req.body.username,
+          password: hash,
+          token:uid2(32)
+        
       });
 
       newUser.save().then(() => {
