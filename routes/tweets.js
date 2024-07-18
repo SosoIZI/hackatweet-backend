@@ -44,23 +44,26 @@ router.delete('/:id',(req,res)=>{                            // id en param (dan
 
 })
 
-/*router.put('/', (req, res) => { 
+router.put('/:token/:id', (req, res) => { 
 
-    const counter = new Counter({
-        tweet:req.body.tweet
-      })
-        newTweet.save().then(()=> {
-      
-          Tweet.find().then(data => {
-      
-              res.json({test:data});
-            });
-          });
-         
-     });
+    Tweet.findOne({ _id: req.params.id }).then(data => {
+        if (data) {
 
-ajouter l'id dans la propriete numberlike de tweet*/
 
+
+    User.findOne({token:req.params.token})
+.then(data => {
+
+console.log()
+//Post.findOneAndUpdate(
+           // { _id: ObjectId(req.params.id) },
+           // { $push: { nbLike: req.user._id },
+          }
+          );
+        }
     
-
+})
+        
+    
+// user.find 
 module.exports = router;
