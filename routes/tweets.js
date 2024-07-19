@@ -15,7 +15,7 @@ res.json({tweet:data})
 
 router.post('/', (req, res) => {  //                              / on écrit pas le nom de la route car elle est déja intégrée dans le app.js
 const newTweet = new Tweet({                                     // route post pour ajouter des nouveaux tweets en base de donnée.
-  tweet:req.body.tweet,
+  tweet: req.body.tweet,
   hashtag: req.body.hashtag,
   date: req.body.date,
 })
@@ -39,35 +39,40 @@ router.delete('/:id',(req,res)=>{                            // id en param (dan
        });
 })
 
-// route PUT => mise à jour du compteur 
+// route PUT => mise à jour du compteur de likes
 
-// router.put('/:token/:id', (req, res) => {      
-//     User.findOne({token:req.params.token})                       // on trouve le document user en fonction de son token 
-// .then(data => {
-//   if(data) {
-//     try {                                                        // try...catch =>  regroupe des instructions à exécuter
-//       Tweet.findOne({ _id: req.params._id }).then(data => {      // on trouve le document tweet en fonction de son id
-//         if (data && !nbLike.includes(req.user._id))              // si le tableau de like ne contient pas le 
-//         // console.log(re.user._id)
-//           {
-//           Post.findOneAndUpdate(
-//             { nbLike: ObjectId(req.params.id) },
-//             { $push: { nbLike: req.user._id.length } },
-//             { "new": true, "upsert": true}
-//           );
-//         }
-//         else {
-          
-//         }
+router.put('/:token/:id', (req, res) => {      
+    User.findOne({token:req.params.token})                       // on trouve le document user en fonction de son token 
+.then(data => {
+  if(data) {
+    try {                   
+                                                                  // try...catch =>  regroupe des instructions à exécuter
+      Tweet.findOne({ _id: req.params._id }).then(data => {      // on trouve le document tweet en fonction de son id
+        if (data && !nbLike.includes(req.user._id))              // si le tableau de like ne contient pas l'id de l'utilisateur,
+                                                                 // on push son id dans le tableau de likes. Si son id est déja présent, 
+                                                                 // on enlève son id. Compteur => data.nbLike.length?
+          {
+          Post.findOneAndUpdate(
+            { nbLike: ObjectId(req.params.id) },
+            { $push: { nbLike: req.user._id} },
+            // { "new": true, "upsert": true}
+          );
+          // res.json({result: true})
 
-//       });
-
-//     } catch(err) {
-//   console.log('Error => ', err)
-//     }
-//   }
-//   }
-// );
-// })
+        } else {
+          Tweet.getCollection('NbLike').updateOne(
+            { nbLike: ObjectId(req.params.id) }, 
+            { $pull: { nbLike: req.user._id } }
+          )
+        // res.json({result: false})
+        }
+      });
+    } catch(err) {
+  console.log('Error => ', err)
+    }
+  }
+  }
+);
+})
 
 module.exports = router;
