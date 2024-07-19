@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema({
   username: String,
   password: String,
   token: String,
-  tweet: { type: mongoose.Schema.Types.ObjectId, ref: 'tweets' },
+  tweet: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tweets' }], // clé étrangère pour lier le tweet à l'utilisateur.
 
 });
 
