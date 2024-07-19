@@ -36,8 +36,6 @@ const hash = bcrypt.hashSync(req.body.password , 10);
 
 
 
-
-
 router.post('/login', (req, res) => {
   if (!req.body.username && !req.body.password) {
     res.json({ result: false, error: 'Missing or empty fields' });
